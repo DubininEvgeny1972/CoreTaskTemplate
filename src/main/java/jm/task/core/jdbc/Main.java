@@ -1,6 +1,6 @@
 package jm.task.core.jdbc;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.service.UserServiceImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class Main {
     public static List<User> listUser = new ArrayList<>();
     public static void main(String[] args) throws SQLException {
-        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        UserServiceImpl userDaoJDBC = new UserServiceImpl();
         userDaoJDBC.createUsersTable();//Создаю таблицу
 
         User user1 = new User("Ivan", "Ivanov", (byte) 25);

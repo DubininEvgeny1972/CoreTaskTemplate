@@ -1,13 +1,8 @@
 package jm.task.core.jdbc.dao;
-
-import jm.task.core.jdbc.Main;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +12,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() throws SQLException {
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
+        Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
         if(statement.executeUpdate("CHECK TABLE USER") != -1) {
             statement.executeUpdate("CREATE TABLE USER " +
@@ -32,8 +26,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() throws SQLException {
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
+        Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
         if(statement.executeUpdate("CHECK TABLE USER") == -1) {
             statement.executeUpdate("DROP TABLE USER");
@@ -43,28 +36,30 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) throws SQLException {
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
-        Statement statement = connection.createStatement();
-        statement.executeUpdate("INSERT INTO USER (NAME, LASTNAME, AGE) VALUES (\"" + name + "\", " + "\"" + lastName +"\", " + age + ")");
+        Connection connection = Util.getConnection();
+        String addUser = "INSERT INTO USER (NAME, LASTNAME, AGE) VALUES (?, ?, ?)";
+        PreparedStatement pstmt = connection.prepareStatement(addUser);
+        pstmt.setString(1, name);
+        pstmt.setString(2, lastName);
+        pstmt.setInt(3, age);
+        pstmt.executeUpdate();
         connection.close();
-        statement.close();
     }
 
     public void removeUserById(long id) throws SQLException{
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
+        Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
         String idStr = Long.toString(id);
-        statement.executeUpdate("DELETE FROM USER WHERE id = \"" + idStr + "\"");
+        String removeUser = "DELETE FROM USER WHERE id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(removeUser);
+        pstmt.setString(1, idStr);
+        pstmt.executeUpdate();
         connection.close();
-        statement.close();
     }
 
     public List<User> getAllUsers() throws SQLException {
         List<User> user = new ArrayList<>();
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
+        Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("SELECT * FROM USER;");
         while(rs.next()) {
@@ -77,8 +72,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable()  throws SQLException {
-        Util UT = new Util();
-        Connection connection = UT.getConnection();
+        Connection connection = Util.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("TRUNCATE TABLE USER");
         connection.close();
