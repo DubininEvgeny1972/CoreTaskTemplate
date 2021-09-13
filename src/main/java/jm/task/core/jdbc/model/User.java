@@ -28,6 +28,10 @@ public class User {
         this.age = age;
     }
 
+    public String toString(){
+        return getName() + " " + getLastName() + " " + getAge();
+    }
+
     public Long getId() {
         return id;
     }

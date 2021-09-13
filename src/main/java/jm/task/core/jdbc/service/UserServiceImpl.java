@@ -1,41 +1,46 @@
 package jm.task.core.jdbc.service;
 
+import jm.task.core.jdbc.Main;
+import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    public void createUsersTable() {
 
+    public void createUsersTable() throws SQLException {
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoJDBC.createUsersTable();
     }
 
-    public void dropUsersTable() {
-
+    public void dropUsersTable() throws SQLException {
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoJDBC.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age) {
-
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoJDBC.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id) {
-
+    public void removeUserById(long id) throws SQLException {
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoJDBC.removeUserById(id);
     }
 
     public List<User> getAllUsers() throws SQLException {
-        List<User> user = new ArrayList<>();
-        ResultSet rs = Util.statement.executeQuery("SELECT * FROM USER;");
-        while(rs.next()) {
-            User us = new User(rs.getString(1), rs.getString(2), rs.getByte(3));
-            user.add(us);
-        }
-        return user;
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        return userDaoJDBC.getAllUsers();
     }
 
-    public void cleanUsersTable() {
-
+    public void cleanUsersTable() throws SQLException {
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        userDaoJDBC.cleanUsersTable();
     }
 }
