@@ -8,29 +8,21 @@ import java.util.List;
 public class Main {
     public static List<User> listUser = new ArrayList<>();
     public static void main(String[] args) throws SQLException {
-        UserServiceImpl userDaoJDBC = new UserServiceImpl();
-        userDaoJDBC.createUsersTable();//Создаю таблицу
+        UserServiceImpl service = new UserServiceImpl();
 
-        User user1 = new User("Ivan", "Ivanov", (byte) 25);
-        User user2 = new User("Jon", "Lennon", (byte) 35);
-        User user3 = new User("Bob", "Dillan", (byte) 52);
-        User user4 = new User("Kirk", "Duglas", (byte) 48);
+        service.createUsersTable();
+        service.saveUser("Ivan", "Ivanov", (byte) 25);
+        service.saveUser("Jon", "Lennon", (byte) 35);
+        service.saveUser("Bob", "Dillan", (byte) 52);
+        service.saveUser("Kirk", "Duglas", (byte) 48);
+        System.out.println(service.getAllUsers());
 
-        listUser.add(user1);
-        listUser.add(user2);
-        listUser.add(user3);
-        listUser.add(user4);
-        for(User user : listUser) {
-            userDaoJDBC.saveUser(user.getName(), user.getLastName(),user.getAge());//Добавляю всех пользователей в таблицу
-            System.out.println("User с именем – " + user.getName() + " добавлен в базу данных");
-        }
+        service.removeUserById(2L);
+        System.out.println(service.getAllUsers());
 
-        List<User> list = userDaoJDBC.getAllUsers();//Получаю всех пользователей из таблицы
-        for(User us : list) {
-            System.out.println(us.toString());//Выводим юзеров в консоль
-        }
-        userDaoJDBC.removeUserById(2); //Удаляем Юзера с ИД = 2
-        userDaoJDBC.cleanUsersTable();//Очищаю таблицу
-        userDaoJDBC.dropUsersTable();//Удаляю таблицу
+        service.cleanUsersTable();
+        System.out.println(service.getAllUsers());
+
+        service.dropUsersTable();
     }
 }
